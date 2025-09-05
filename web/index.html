@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cursos - Visualización</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Cursos</h1>
+      <div class="toggles">
+        <button id="reload" aria-label="Recargar datos">⟳ Recargar</button>
+        <button id="themeToggle" aria-label="Alternar tema">🌗 Tema</button>
+      </div>
+    </header>
+
+    <section class="kpis">
+      <div><strong>Total:</strong> <span id="kpiTotal">0</span></div>
+      <div><strong>Promedio de horas:</strong> <span id="kpiProm">0</span></div>
+      <div><strong>Más caro:</strong> <span id="kpiMax">-</span></div>
+      <div><strong>Más barato:</strong> <span id="kpiMin">-</span></div>
+    </section>
+
+    <section class="controls">
+      <div class="control">
+        <label for="q">Búsqueda (nombre o código):</label>
+        <input id="q" type="search" placeholder="Buscar..." />
+      </div>
+      <div class="control">
+        <span>Categorías:</span>
+        <label><input type="checkbox" class="cat" value="Económico" checked /> Económico</label>
+        <label><input type="checkbox" class="cat" value="Estándar" checked /> Estándar</label>
+        <label><input type="checkbox" class="cat" value="Premium" checked /> Premium</label>
+      </div>
+      <div class="control">
+        <label for="minCost">Costo mín.:</label>
+        <input id="minCost" type="number" step="0.01" min="0" />
+        <label for="maxCost">máx.:</label>
+        <input id="maxCost" type="number" step="0.01" min="0" />
+      </div>
+      <div class="control">
+        <label for="sort">Ordenar por:</label>
+        <select id="sort">
+          <option value="nombre-asc">Nombre (A→Z)</option>
+          <option value="nombre-desc">Nombre (Z→A)</option>
+          <option value="costo-asc">Costo ↑</option>
+          <option value="costo-desc">Costo ↓</option>
+          <option value="horas-asc">Horas ↑</option>
+          <option value="horas-desc">Horas ↓</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Nombre</th>
+            <th>Horas</th>
+            <th>Costo</th>
+            <th>Categoría</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </section>
+
+    <nav class="pager">
+      <button id="prev">← Anterior</button>
+      <span id="pageInfo"></span>
+      <button id="next">Siguiente →</button>
+      <label>
+        Por página:
+        <select id="pageSize">
+          <option>5</option>
+          <option selected>10</option>
+          <option>20</option>
+        </select>
+      </label>
+    </nav>
+
+    <footer>
+      <p>Fuente de datos: <code>web/cursos.json</code> (exportado desde la app de consola)</p>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+  </html>
+

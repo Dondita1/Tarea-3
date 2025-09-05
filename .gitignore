@@ -1,0 +1,34 @@
+# Build directories
+build/
+cmake-build*/
+CMakeFiles/
+CMakeCache.txt
+Makefile
+*.make
+
+# Visual Studio/MSVC
+.vs/
+*.sln
+*.vcxproj*
+*.vcproj*
+*.user
+x64/
+*.pdb
+*.idb
+**/*.tlog/
+*.log
+
+# Binaries/artefacts
+*.exe
+*.dll
+*.so
+*.a
+*.lib
+*.obj
+
+# App data
+cursos.dat
+
+# OS
+Thumbs.db
+.DS_Store
