@@ -19,16 +19,38 @@
 #include <windows.h>
 #endif
 
-using std::cin;
-using std::cout;
-using std::endl;
-using std::size_t;
-using std::string;
-using std::vector;
+using namespace std;
 
 static const char* BIN_FILENAME = "cursos.dat";
 static const char* WEB_DIR = "web";
 static const char* WEB_JSON = "web/cursos.json";
+
+// Filtro de salida: elimina comas de toda la salida por consola
+class NoCommaBuf : public std::streambuf {
+    std::streambuf* dest;
+public:
+    explicit NoCommaBuf(std::streambuf* d) : dest(d) {}
+protected:
+    int overflow(int ch) override {
+        if (ch == std::char_traits<char>::eof()) {
+            return dest->sputc(ch);
+        }
+        if (ch == ',') {
+            // omitir coma
+            return ch;
+        }
+        return dest->sputc(static_cast<char>(ch));
+    }
+    std::streamsize xsputn(const char* s, std::streamsize n) override {
+        std::streamsize written = 0;
+        for (std::streamsize i = 0; i < n; ++i) {
+            if (s[i] == ',') continue; // omitir coma
+            if (dest->sputc(s[i]) == std::char_traits<char>::eof()) break;
+            ++written;
+        }
+        return written;
+    }
+};
 
 #pragma pack(push, 1)
 struct CursoRecord {
@@ -377,6 +399,11 @@ void cargar_un_curso() {
     else cout << "Error al guardar el curso." << endl;
 }
 
+void agregar_sin_sobrescribir() {
+    cout << "\n--- Agregar nuevo curso sin sobrescribir ---\n";
+    cargar_un_curso();
+}
+
 void registrar_en_bucle() {
     cout << "\n--- Registro consecutivo de cursos ---\n";
     while (true) {
@@ -581,8 +608,47 @@ void menu() {
     }
 }
 
+void menu2() {
+    Umbrales umbrales;
+    while (true) {
+        cout << "\n==============================\n";
+        cout << " Gestion de Cursos cursos.dat\n";
+        cout << "==============================\n";
+        cout << "1) Cargar cursos con codigo nombre horas y costo\n";
+        cout << "2) Calcular el promedio de horas\n";
+        cout << "3) Agregar nuevos cursos sin sobrescribir\n";
+        cout << "4) Buscar un curso por codigo\n";
+        cout << "5) Registrar cursos en bucle\n";
+        cout << "6) Mostrar cuantos cursos superan cierto costo\n";
+        cout << "7) Ordenar cursos alfabeticamente\n";
+        cout << "8) Clasificar cursos por costo economicos estandar premium\n";
+        cout << "9) Indicar el curso mas caro y el mas barato\n";
+        cout << "10) Modificar el costo de un curso directamente en el archivo\n";
+        cout << "0) Salir\n";
+        int op = leer_entero("Elige una opcion: ");
+        switch (op) {
+            case 1: cargar_un_curso(); break;
+            case 2: promedio_horas(); break;
+            case 3: agregar_sin_sobrescribir(); break;
+            case 4: buscar_por_codigo_op2(umbrales); break;
+            case 5: registrar_en_bucle(); break;
+            case 6: contar_mayores_a_umbral(); break;
+            case 7: listar_ordenados_nombre(umbrales); break;
+            case 8: clasificar_por_costo(umbrales); break;
+            case 9: extremos_costo(umbrales); break;
+            case 10: modificar_costo_inplace_op2(); break;
+            case 0: cout << "Hasta luego!" << endl; return;
+            default: cout << "Opcion invalida." << endl; break;
+        }
+        pausa();
+    }
+}
+
 int main() {
     asegurar_archivo();
-    menu();
+    // activar filtro global para eliminar comas en salida
+    NoCommaBuf ncb(std::cout.rdbuf());
+    std::cout.rdbuf(&ncb);
+    menu2();
     return 0;
 }
