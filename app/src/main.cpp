@@ -561,17 +561,17 @@ void menu() {
         cout << "0) Salir\n";
         int op = leer_entero("Elegí una opción: ");
         switch (op) {
-            case 1: cargar_un_curso(); break;
-            case 2: registrar_en_bucle(); break;
+            case 1: cargar_un_curso(); exportar_json2(); break;
+            case 2: registrar_en_bucle(); exportar_json2(); break;
             case 3: promedio_horas(); break;
             case 4: buscar_por_codigo_op2(umbrales); break;
             case 5: contar_mayores_a_umbral(); break;
             case 6: listar_ordenados_nombre(umbrales); break;
             case 7: clasificar_por_costo(umbrales); break;
             case 8: extremos_costo(umbrales); break;
-            case 9: modificar_costo_inplace_op2(); break;
+            case 9: modificar_costo_inplace_op2(); exportar_json2(); break;
             case 10: exportar_json2(); break;
-            case 11: cargar_datos_ejemplo(); break;
+            case 11: cargar_datos_ejemplo(); exportar_json2(); break;
             case 12: modificar_umbrales(umbrales); break;
             case 13: limpiar_pantalla(); break;
             case 0: cout << "¡Hasta luego!" << endl; return;
